@@ -10,13 +10,14 @@ public class Users {
     private String phone;
     private String password;
     public String screenname;
+    public String querry;
 
     public String post_private_msg(String text, String email){
 
     	querry = "INSERT INTO Messages(message_id, timestamp, text, sender) ";
-    	message_id = "";
+    	String message_id = "";
     	Date date=new Date();
-    	timestamp = date.getTime();
+    	String timestamp = date.getTime();
     	querry += "VALUES (" + message_id + ", " + timestamp + ", " 
     			+  text + ", " + email+ " );";
     	return querry;
