@@ -14,7 +14,13 @@ public class Managers extends Users {
         return querry;
     }
 
-   public void findTopMsg(){
+   public String findTopMsg(){
+       querry="SELECT count(R.message_id) AS numReceive, R.message_id\n" +
+               "FROM Receives R,MyCircle_msg C\n" +
+               "WHERE R.message_id = C.circle_message_id\n" +
+               "GROUP BY R.message_id\n" +
+               "ORDER BY numReceive DESC;";
+       return querry;
 
    }
    public String findInactiveUsers(){
