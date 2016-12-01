@@ -1,65 +1,94 @@
-import java.util.*;
-import java.util.ArrayList;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Date;
 
 
 public class Users {
 
+    static Connection con;
 
     public String post_private_msg(String text, String email){
-        querry = "INSERT INTO Messages(message_id, timestamp, text) ";
+        querry = "INSERT INTO Messages(message_id, timestamp, text,sender) ";
         message_id = "";//to do
         Date date=new Date();
         timestamp = date.getTime();
         querry += "VALUES (" + message_id + ", " + timestamp + ", "
-                +  text +" ) ";
+                +  text +","+ this.email + " ) ";
         querry += "INSERT INTO ";
         return querry;
     }
 
     public String post_ChatGroup_msg(String text, String chatGroup_name){
-        querry = "INSERT INTO ChatGroup_msg(message_id, timestamp, text) ";
+        querry = "INSERT INTO ChatGroup_msg(message_id, timestamp, text, sender) ";
         message_id= "";
         Date date=new Date();
         timestamp = date.getTime();
         querry += "VALUES (" + message_id + ", " + timestamp + ", "
-                +  text + ", " + " );";
+                +  text + ", " + this.email+ " );";
         return querry;
 
     }
     public String create_ChatGroup(String name, int duration){
-        querry = "INSERT INTO ChatGroups(name, duration, owner) ";
-        querry += "VALUES (" + name + ", " + duration + ", " + this.email +");";
+        querry = "INSERT INTO ChatGroups(name, duration) ";
+        querry += "VALUES (" + name + ", " + duration +"); ";
+        querry += "INSERT INTO ChatGroup_Owner(name, email) ";
+        querry += "VALUES (" + name + "," + this.email +");";
         return querry;
     }
-    public String invite(String email, String chatGroup_name){
+    public void invite(String email, String chatGroup_name){
         post_private_msg("Invited to ChatGroup" + chatGroup_name,email);
-        return "";
     }
-    public String accept_ChatGroup_inv(int message_id) {
+    public String accept_ChatGroup_inv(String chatGroup_name, String email) {
+        querry = "INSERT INTO ChatGroup_Member(email, name) ";
+        querry+= "VALUES ("+ this.email + "," + chatGroup_name +");";
+    return querry;
+    }
 
-    return "";
-    }
-    public String get_message_id(String message_id){
-        querry= "SELECT M.message_id FROM Messages M";
-        querry+= "WHERE M.message_id = " + message_id;
-        return querry;
-    }
     public String display_more(){
         //"scroll" to display more than 7 messages
         return "";
     }
-    public String delete_msg(){
-        return "";
-    }
-    public String invite_friend(){
-        return "";
-    }
-    public String modify_chatgroup(){
+
+    public String delete_msg(Boolean senderDel, Boolean receiverDel){
         return "";
     }
 
 
+    public void invite_friend(String email){
+        post_private_msg("Invited to be friends with"+this.email,email);
+    }
 
+
+    public String modify_chatgroup(String name, int duration){
+
+        return "";
+    }
+
+    public String post_MyCircle_msg(String text, String topicWords, Boolean flag){
+
+    }
+
+
+
+
+
+    private static ResultSet executeSQL(String sql){
+        //String sql = "SELECT * FROM rmr.Customers";
+        ResultSet rs = null;
+        try{
+            Statement st = con.createStatement();
+            rs = st.executeQuery(sql);
+            //		while(rs.next())
+            //MODIFY PRINT TO FIT YOUR QUERY AND ATTRIBUTE TYPES
+            //System.out.println(rs.getInt(1)+" "+rs.getString(2));
+            //con.close();
+        } catch(Exception e) {
+            System.out.println(e);
+        }
+        return rs;
+    }
 
 
 
